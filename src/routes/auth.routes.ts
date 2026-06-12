@@ -1,8 +1,14 @@
 import { FastifyInstance } from "fastify";
 
-import { registerSchema } from "@/schemas/auth.schema";
+import {
+  registerSchema,
+  loginSchema,
+} from "../schemas/auth.schema";
 
-import { registerUser } from "@/services/auth.service";
+import {
+  registerUser,
+  loginUser,
+} from "../services/auth.service";
 
 export async function authRoutes(
   app: FastifyInstance
@@ -15,19 +21,18 @@ export async function authRoutes(
     ) => {
       try {
         const body =
-          registerSchema.parse( //Parse Body
+          registerSchema.parse(
             request.body
           );
 
         const user =
-          await registerUser( //Call Service
+          await registerUser(
             body
           );
 
         return reply
           .status(201)
           .send(user);
-
       } catch (error) {
         return reply
           .status(400)
@@ -36,6 +41,39 @@ export async function authRoutes(
               error instanceof Error
                 ? error.message
                 : "Registration failed",
+          });
+      }
+    }
+  );
+
+  app.post(
+    "/auth/login",
+    async (
+      request,
+      reply
+    ) => {
+      try {
+        const body =
+          loginSchema.parse(
+            request.body
+          );
+
+        const result =
+          await loginUser(
+            body
+          );
+
+        return reply.send(
+          result
+        );
+      } catch (error) {
+        return reply
+          .status(401)
+          .send({
+            message:
+              error instanceof Error
+                ? error.message
+                : "Login failed",
           });
       }
     }

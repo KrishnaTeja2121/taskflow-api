@@ -1,16 +1,29 @@
 import Fastify from "fastify";
 
 import { authRoutes } from "./routes/auth.routes";
+import { userRoutes } from "./routes/user.routes";
 
-const app =
-  Fastify({
-    logger: true,
-  });
-const port =
-  Number(process.env.PORT ?? 3001);
+const app = Fastify({
+  logger: true,
+});
 
 app.register(
   authRoutes
 );
 
-app.listen({ port });
+app.register(
+  userRoutes
+);
+
+app.listen({
+  port: 3001,
+})
+.then(() => {
+  console.log(
+    "Server running on port 3001"
+  );
+})
+.catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
