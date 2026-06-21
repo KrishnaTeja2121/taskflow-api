@@ -2,6 +2,9 @@ import Fastify from "fastify";
 
 import { authRoutes } from "./routes/auth.routes";
 import { userRoutes } from "./routes/user.routes";
+import {
+  taskRoutes,
+} from "./routes/task.routes";
 
 const app = Fastify({
   logger: true,
@@ -13,6 +16,10 @@ app.register(
 
 app.register(
   userRoutes
+);
+
+app.register(
+  taskRoutes
 );
 
 app.listen({
