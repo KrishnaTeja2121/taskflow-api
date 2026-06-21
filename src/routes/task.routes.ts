@@ -65,7 +65,14 @@ export async function taskRoutes(app: FastifyInstance) {
         preHandler:verifyAuth,
     },
     async (request:any)=>{
-        return getTasks(request.user.userId);
+        const {
+            page="1",
+            limit="10",
+        }=request.query;
+        return getTasks(request.user.userId,
+            Number(page),Number(limit)
+        );
+    
     });
 
 
@@ -92,7 +99,7 @@ export async function taskRoutes(app: FastifyInstance) {
         .send({
           message:
             "Task not found",
-        });
+        }); 
     }
 
     return task;
